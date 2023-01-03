@@ -240,7 +240,7 @@ echo " * Removing bootstrap files"
 chown -R root $RELEASEDIR/usr/src*
 cp issue.install $RELEASEDIR/etc/issue
 
-echo $version_pretty, GIT revision $REVTAG, generated `date` >$RELEASEDIR/etc/version
+echo $version_pretty, GIT Hello World revision $REVTAG, generated `date` >$RELEASEDIR/etc/version
 rm -rf $RELEASEDIR/tmp/*
 
 if [ $MINIMAL -ne 0 ]
