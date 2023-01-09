@@ -10,7 +10,7 @@ int main()
         int child_pid = fork();
         if(child_pid == 0) printf("character: %c, PID: %d\n", hello[i++], getpid());
         else{
-            sleep(5);
+            sleep(3);
             break;
         }
     }
