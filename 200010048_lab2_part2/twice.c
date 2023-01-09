@@ -7,7 +7,7 @@ int main(int argc, char* argv[]){
     if(argc >= 2){
         int value = atoi(argv[argc-1]);
         value *= 2;
-        printf("Twice: Current process id: %d, Current result: %d\n", getppid(), value);
+        printf("Twice: Current process id: %d, Current result: %d\n", getpid(), value);
         char val[12];
         sprintf(val, "%d", value);
         argv[argc-1] = val;
