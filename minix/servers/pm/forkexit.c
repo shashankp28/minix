@@ -721,7 +721,7 @@ static void cleanup(rmp)
 register struct mproc *rmp;	/* tells which process is exiting */
 {
   /* Release the process table entry and reinitialize some field. */
-  printf("Minix: PID %d exited\n", rm->mp_pid);
+  printf("Minix: PID %d exited\n", rmp->mp_pid);
   rmp->mp_pid = 0;
   rmp->mp_flags = 0;
   rmp->mp_child_utime = 0;
