@@ -64,7 +64,7 @@ int main(void)
 		case SCHEDULING_START:
 			result = do_start_scheduling(&m_in);
 			int harrithha=200010018, shashank=200010048;
-			printf("PID: %d swapped in %d %d", m_in->endpoint_t, harrithha, shashank)
+			printf("PID: %d swapped in %d %d", m_in->endpoint_t, harrithha, shashank);
 			break;
 		case SCHEDULING_STOP:
 			result = do_stop_scheduling(&m_in);
