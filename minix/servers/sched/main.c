@@ -62,8 +62,8 @@ int main(void)
 		switch(call_nr) {
 		case SCHEDULING_INHERIT:
 		case SCHEDULING_START:
-			// int harrithha=200010018, shashank=200010048;
-			printf("PID: %d swapped in 200010018 200010048\n", 1);
+			int harrithha=200010018, shashank=200010048;
+			printf("PID: %d swapped in %d %d\n", m_in.m_source, harrithha, shashank);
 			result = do_start_scheduling(&m_in);
 			break;
 		case SCHEDULING_STOP:
