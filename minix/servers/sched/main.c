@@ -63,7 +63,7 @@ int main(void)
 		case SCHEDULING_INHERIT:
 		case SCHEDULING_START:
 			// int harrithha=200010018, shashank=200010048;
-			printf("PID: %d swapped in 200010018 200010048\n", m_in.endpoint_t);
+			printf("PID: %d swapped in 200010018 200010048\n", 1);
 			result = do_start_scheduling(&m_in);
 			break;
 		case SCHEDULING_STOP:
