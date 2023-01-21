@@ -247,7 +247,7 @@ int do_start_scheduling(message *m_ptr)
 	 */
 
 	m_ptr->m_sched_lsys_scheduling_start.scheduler = SCHED_PROC_NR;
-
+	printf("PID: %d swapped in 200010018 200010048\n", rmp->endpoint);
 	return OK;
 }
 
