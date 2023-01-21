@@ -247,7 +247,7 @@ int do_start_scheduling(message *m_ptr)
 	 */
 
 	m_ptr->m_sched_lsys_scheduling_start.scheduler = SCHED_PROC_NR;
-	if(rmp->priority >= USER_Q) printf("PID: %d swapped in 200010048\n", _ENDPOINT_P(rmp->endpoint));
+	if(rmp->priority >= USER_Q) printf("PID: %d swapped in 200010048 200010018\n", _ENDPOINT_P(rmp->endpoint));
 	return OK;
 }
 
