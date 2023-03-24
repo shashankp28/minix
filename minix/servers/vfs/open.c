@@ -115,8 +115,13 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 	r = err_code;
 	if (r == OK){
 		exist = FALSE;	/* We just created the file */
-		if (strcmp(vmp->m_mount_path, "/home") == 0)
+
+		struct vmnt *virtual_mount;
+		virtual_mount = find_vmnt(vp->v_fs_e);
+		if (strcmp(virtual_mount->m_mount_path, "/home") == 0)
+		{
 			printf("file created: %llu\n", vp->v_inode_nr);
+		}
 	}
 	else if (r != EEXIST) {		/* other error */
 		if (vp) unlock_vnode(vp);
