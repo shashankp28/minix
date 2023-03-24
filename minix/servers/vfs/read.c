@@ -254,13 +254,18 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 							  rw_flag, for_e, buf, size, &new_pos,
 							  &cum_io_incr);
 
-			if (rw_flag == READING)
-				printf("file read: %llu; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
-			else if (rw_flag == WRITING)
-				printf("file write: %llu; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
-
 			if (r >= 0)
 			{
+				if (strcmp(vp->v_vmnt->m_mount_path, "/home") == 0){
+					if(rw_flag == READING){
+						printf("file read: %lld\n; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
+					}
+					else if (rw_flag == WRITING){
+						printf("file write: %lld\n; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
+					}
+				}
+
+
 				position = new_pos;
 				cum_io += cum_io_incr;
 			}
