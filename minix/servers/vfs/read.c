@@ -257,9 +257,9 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 			if (r >= 0)
 			{
 				if (rw_flag == READING) 
-					printf("file read: %llu; nbytes = %d; offset = %d\n", vp->v_inode_nr, size, position);
+					printf("file read: %llu; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
 				else if(rw_flag == WRITING)
-					printf("file write: %llu; nbytes = %d; offset = %d\n", vp->v_inode_nr, size, position);
+					printf("file write: %llu; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
 			position = new_pos;
 			cum_io += cum_io_incr;
 			}
