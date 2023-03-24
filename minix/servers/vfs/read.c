@@ -258,10 +258,10 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 			{
 				if (rw_flag == READING) 
 					printf("file read: %llu; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
-				else if(rw_flag == WRITING)
-					printf("file write: %llu; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
-			position = new_pos;
-			cum_io += cum_io_incr;
+				// else if(rw_flag == WRITING)
+				// 	printf("file write: %llu; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
+				position = new_pos;
+				cum_io += cum_io_incr;
 			}
 		}
 	}
