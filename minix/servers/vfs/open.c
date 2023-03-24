@@ -26,6 +26,8 @@
 #include "vnode.h"
 #include "vmnt.h"
 #include "path.h"
+#include <stdio.h>
+#include <string.h>
 
 static char mode_map[] = {R_BIT, W_BIT, R_BIT|W_BIT, 0};
 

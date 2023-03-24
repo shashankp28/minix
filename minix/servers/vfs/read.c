@@ -23,6 +23,8 @@
 #include "scratchpad.h"
 #include "vnode.h"
 #include "vmnt.h"
+#include <stdio.h>
+#include <string.h>
 
 /*===========================================================================*
  *				do_read					     *
