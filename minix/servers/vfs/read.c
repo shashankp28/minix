@@ -256,6 +256,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 							  rw_flag, for_e, buf, size, &new_pos,
 							  &cum_io_incr);
 
+
 			if (r >= 0)
 			{
 				// if (strcmp(vp->v_vmnt->m_mount_path, "/home") == 0){
@@ -267,6 +268,16 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 				// 	}
 				// }
 
+				struct vmnt *virtual_mount;
+				virtual_mount = find_vmnt(vp->v_fs_e);
+				if (rw_flag==WRITING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
+				{
+					printf("file write: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
+				}
+				else if (rw_flag==READING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
+				{
+					printf("file read: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
+				}
 
 				position = new_pos;
 				cum_io += cum_io_incr;
