@@ -121,7 +121,6 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 
 			struct vmnt *virtual_mount;
 			virtual_mount = find_vmnt(vp->v_fs_e);
-			printf("Virtual Mount Path: %s", virtual_mount->m_mount_path);
 			if (strcmp(virtual_mount->m_mount_path, "/home") == 0)
 			{
 				printf("file created: %llu\n", vp->v_inode_nr);
