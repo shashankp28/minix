@@ -176,7 +176,7 @@ int do_unlink(void)
   // Look up inode of file to unlink to retrieve owner
   vp = advance(dirp, &stickycheck, fp);
 
-  if (strcmp(virtual_mount->m_mount_path, "/home") == 0)
+  if (strcmp(vmp->m_mount_path, "/home") == 0)
   {
     printf("file deleted: %llu\n", vp->v_inode_nr);
   }
