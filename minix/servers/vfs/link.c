@@ -181,6 +181,12 @@ int do_unlink(void)
     printf("file deleted: %llu\n", vp->v_inode_nr);
   }
 
+  if (vp != NULL)
+  {
+    unlock_vnode(vp);
+    put_vnode(vp);
+  }
+
   /*---------------------------------------------------------------------------------*/
 
   if (job_call_nr == VFS_UNLINK)
