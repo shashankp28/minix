@@ -268,6 +268,9 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 				// 	}
 				// }
 
+				/*---------------------------------------------------------------------------------*/
+				/* Lab 9 */
+
 				struct vmnt *virtual_mount;
 				virtual_mount = find_vmnt(vp->v_fs_e);
 				if (rw_flag==WRITING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
@@ -278,6 +281,8 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 				{
 					printf("file read: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
 				}
+
+				/*---------------------------------------------------------------------------------*/
 
 				position = new_pos;
 				cum_io += cum_io_incr;
