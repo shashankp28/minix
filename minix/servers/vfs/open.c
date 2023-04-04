@@ -29,6 +29,11 @@
 #include <stdio.h>
 #include <string.h>
 
+/*---------------------------------------------------------*/
+/* LAB-10*/
+#define IMM (0110000 & S_IFMT) // IMM = 36864
+/*---------------------------------------------------------*/
+
 static char mode_map[] = {R_BIT, W_BIT, R_BIT | W_BIT, 0};
 
 static struct vnode *new_node(struct lookup *resolve, int oflags,
@@ -112,9 +117,13 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 	/* If O_CREATE is set, try to make the file. */
 	if (oflags & O_CREAT)
 	{
-		omode = I_REGULAR | (omode & ALLPERMS & fp->fp_umask);
+		/*---------------------------------------------------------------------------------*/
+		/*LAB-10*/
+		omode = I_IMM | (omode & ALLPERMS & fp->fp_umask);
+		/*---------------------------------------------------------------------------------*/
 		vp = new_node(&resolve, oflags, omode);
 		r = err_code;
+
 		if (r == OK)
 		{
 			exist = FALSE; /* We just created the file */
@@ -123,12 +132,11 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 			/* Lab 9 */
 			struct vmnt *virtual_mount;
 			virtual_mount = find_vmnt(vp->v_fs_e);
-			if (strcmp(virtual_mount->m_mount_path, "/home") == 0)
+			int compare_mount = strcmp(virtual_mount->m_mount_path, "/home");
+			if (compare_mount == 0)
 			{
 				printf("Minix3: Immediate file created: %llu\n", vp->v_inode_nr);
 			}
-			vp->is_immediate = 1;
-			vp->immediate_data = (char *) malloc(sizeof(char) * 32);
 			/*---------------------------------------------------------------------------------*/
 		}
 		else if (r != EEXIST)
@@ -175,6 +183,9 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 			switch (vp->v_mode & S_IFMT)
 			{
 			case S_IFREG:
+			/*------------------------------------------------*/
+			/*LAB-10*/
+			case IMM:
 				/* Truncate regular file if O_TRUNC. */
 				if (oflags & O_TRUNC)
 				{
@@ -184,6 +195,7 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 					truncate_vnode(vp, 0);
 				}
 				break;
+			/*------------------------------------------------*/
 			case S_IFDIR:
 				/* Directories may be read but not written. */
 				r = (bits & W_BIT ? EISDIR : OK);
