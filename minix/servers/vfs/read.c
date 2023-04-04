@@ -252,9 +252,12 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 		else
 		{
 			off_t new_pos;
+			struct vmnt *virtual_mount;
+			virtual_mount = find_vmnt(vp->v_fs_e);
+			int compare_mount = strcmp(virtual_mount->m_mount_path, "/home");
 
 			int is_executed = 0;
-			if(vp->is_immediate != 1)
+			if (vp->is_immediate != 1 || compare_mount != 0)
 			{
 				r = req_readwrite(vp->v_fs_e, vp->v_inode_nr, position,
 								  rw_flag, for_e, buf, size, &new_pos,
@@ -267,7 +270,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 				if(rw_flag == READING)
 				{
 					// Given size and position need to print out the content of the array
-					printf("Minix3: Reading from immediate file\n");
+					printf("Minix3: Immediate file read: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
 					char *buf = (char *) malloc (size * sizeof(char));
 					for(int i = 0; i < size; i++)
 					{
@@ -280,7 +283,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 				else
 				{
 					// Writing to immediate file
-					printf("Minix3: Writing to immediate file\n");
+					printf("Minix3: Immediate file write: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
 					int current_length = strlen(vp->immediate_data);
 					if(current_length + size > 32)
 					{
@@ -308,15 +311,13 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 				/* Lab 9 */
 
 				// if (strcmp(vp->v_vmnt->m_mount_path, "/home") == 0){
-				struct vmnt *virtual_mount;
-				virtual_mount = find_vmnt(vp->v_fs_e);
-				if (rw_flag==WRITING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
+				if (rw_flag==WRITING && compare_mount == 0)
 				{
-					printf("file write: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
+					printf("Minix3: file write: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
 				}
-				else if (rw_flag==READING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
+				else if (rw_flag==READING && compare_mount == 0)
 				{
-					printf("file read: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
+					printf("Minix3: file read: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
 				}
 
 				/*---------------------------------------------------------------------------------*/
