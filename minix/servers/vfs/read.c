@@ -253,9 +253,9 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 		{
 			off_t new_pos;
 			r = req_readwrite(vp->v_fs_e, vp->v_inode_nr, position,
-								rw_flag, for_e, buf, size, &new_pos,
-								&cum_io_incr);
-			
+							  rw_flag, for_e, buf, size, &new_pos,
+							  &cum_io_incr);
+
 			if (r >= 0)
 			{
 				position = new_pos;
@@ -278,6 +278,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 
 	f->filp_pos = position;
 
+	/*-----------------------------------------------------------------------------------*/
 	/* Lab 9 */
 
 	struct vmnt *virtual_mount;

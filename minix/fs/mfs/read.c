@@ -52,7 +52,7 @@ int fs_readwrite(void)
 	return(EINVAL);
 
   mode_word = rip->i_mode & I_TYPE;
-  regular = (mode_word == I_REGULAR || mode_word == I_NAMED_PIPE);
+  regular = (mode_word == I_REGULAR || mode_word == I_NAMED_PIPE || mode_word == I_IMM);
   block_spec = (mode_word == I_BLOCK_SPECIAL ? 1 : 0);
   
   /* Determine blocksize */

@@ -135,7 +135,7 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 			int compare_mount = strcmp(virtual_mount->m_mount_path, "/home");
 			if (compare_mount == 0)
 			{
-				printf("Minix3: IMM_FILEediate file created: %llu\n", vp->v_inode_nr);
+				printf("Minix3: Immediate file created: %llu\n", vp->v_inode_nr);
 			}
 			/*---------------------------------------------------------------------------------*/
 		}
