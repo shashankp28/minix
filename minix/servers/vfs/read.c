@@ -259,16 +259,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 
 			if (r >= 0)
 			{
-				// if (strcmp(vp->v_vmnt->m_mount_path, "/home") == 0){
-				// 	if(rw_flag == READING){
-				// 		printf("file read: %lld\n; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
-				// 	}
-				// 	else if (rw_flag == WRITING){
-				// 		printf("file write: %lld\n; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
-				// 	}
-				// }
 
-				/*---------------------------------------------------------------------------------*/
 				/* Lab 9 */
 
 				struct vmnt *virtual_mount;
@@ -276,6 +267,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 				if (rw_flag==WRITING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
 				{
 					printf("file write: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
+					printf("Buffer: %lu\n", buf)
 				}
 				else if (rw_flag==READING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
 				{
