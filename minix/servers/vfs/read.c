@@ -267,7 +267,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 				if (rw_flag==WRITING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
 				{
 					printf("file write: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
-					printf("Buffer: %lu\n", buf)
+					printf("Buffer: %lu\n", buf);
 				}
 				else if (rw_flag==READING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
 				{
