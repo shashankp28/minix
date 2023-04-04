@@ -49,10 +49,10 @@ int block_size;
 uint8_t fs_mode_to_type(mode_t mode)
 {
 	if(S_ISREG(mode)) return DT_REG;
-	
+
 	/*----------------------------------------------------------------------*/
 	/*LAB-10*/
-	else if (((0110000) == ((mode)&0170000))) return DT_REG;
+	else if (((0110000) == ((mode)&0170000))) return DT_REG;
 	/*----------------------------------------------------------------------*/
 
 	else if(S_ISDIR(mode)) return DT_DIR;
