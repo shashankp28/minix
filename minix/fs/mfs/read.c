@@ -39,6 +39,11 @@ int fs_readwrite(void)
   int completed;
   struct inode *rip;
   size_t nrbytes;
+
+  /*---------------*/
+  /*LAB-10*/
+  int immediate = 0;
+  /*---------------*/
   
   r = OK;
   
