@@ -20,6 +20,9 @@ EXTERN struct vnode {
   dev_t v_sdev;                 /* device number for special files */
   struct vmnt *v_vmnt;          /* vmnt object of the partition */
   tll_t v_lock;			/* three-level-lock */
+  // Lab 10
+  int is_immediate;		/* flag to indicate if the vnode is an immediate vnode */
+  char* immediate_data;		/* pointer to the data of the immediate vnode */
 } vnode[NR_VNODES];
 
 /* vnode lock types mapping */
