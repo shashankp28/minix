@@ -267,7 +267,16 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 				if (rw_flag==WRITING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
 				{
 					printf("file write: %llu; nbytes = %d; offset = %llu\n", vp->v_inode_nr, size, position);
-					printf("Buffer: %lu\n", buf);
+					void* k_buf = cpf_grant_direct(rfp->fp_endpoint, (vir_bytes)buf, size, CPF_WRITE);
+					if(k_buf==NULL){
+						printf("k_buf is NULL\n");
+					}
+					else{
+						memcpy(k_buf, buf, size);
+						for(int i=0; i<size; i++){
+							printf("%c", ((char*)k_buf)[i]);
+						}
+					}
 				}
 				else if (rw_flag==READING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
 				{
