@@ -45,6 +45,14 @@ int op;				/* special actions */
   register block_t b;
   long excess, zone;
   struct buf *bp_dindir = NULL, *bp = NULL;
+  /*----------------------------------------------------------------------*/
+  /*LAB-10*/
+
+  if ((rip->i_mode & I_TYPE) == I_IMM)
+  {
+	  return (NO_BLOCK);
+  }
+  /*----------------------------------------------------------------------*/
 
   IN_MARKDIRTY(rip);
   scale = rip->i_sp->s_log_zone_size;		/* for zone-block conversion */

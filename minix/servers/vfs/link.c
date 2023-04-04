@@ -426,8 +426,11 @@ off_t newsize;
   int r;
 
   assert(tll_locked_by_me(&vp->v_lock));
-  if (!S_ISREG(vp->v_mode) && !S_ISFIFO(vp->v_mode))
-    return (EINVAL);
+
+  /*-----------------------------------------*/
+  /*LAB-10*/
+  if (!S_ISFIFO(vp->v_mode) && !(S_ISREG(vp->v_mode) || (vp->v_mode & S_IFMT) == 0110000)) return (EINVAL);
+  /*-----------------------------------------*/
 
   /* We must not compare the old and the new size here: this function may be
    * called for open(2), which requires an update to the file times if O_TRUNC

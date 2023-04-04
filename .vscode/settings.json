@@ -2,6 +2,7 @@
   "files.associations": {
     "*.embeddedhtml": "html",
     "regex": "c",
-    "random": "c"
+    "random": "c",
+    "*.inc": "c"
   }
 }
