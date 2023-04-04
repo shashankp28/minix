@@ -252,25 +252,62 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 		else
 		{
 			off_t new_pos;
-			r = req_readwrite(vp->v_fs_e, vp->v_inode_nr, position,
-							  rw_flag, for_e, buf, size, &new_pos,
-							  &cum_io_incr);
 
-
-			if (r >= 0)
+			int is_executed = 0;
+			if(vp->is_immediate != 1)
 			{
-				// if (strcmp(vp->v_vmnt->m_mount_path, "/home") == 0){
-				// 	if(rw_flag == READING){
-				// 		printf("file read: %lld\n; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
-				// 	}
-				// 	else if (rw_flag == WRITING){
-				// 		printf("file write: %lld\n; nbytes = %d; offset = %lld\n", vp->v_inode_nr, size, position);
-				// 	}
-				// }
+				r = req_readwrite(vp->v_fs_e, vp->v_inode_nr, position,
+								  rw_flag, for_e, buf, size, &new_pos,
+								  &cum_io_incr);
+			}
 
-				/*---------------------------------------------------------------------------------*/
+			else
+			{
+				is_executed = 1;
+				if(rw_flag == READING)
+				{
+					// Given size and position need to print out the content of the array
+					printf("Minix3: Reading from immediate file\n");
+					char *buf = (char *) malloc (size * sizeof(char));
+					for(int i = 0; i < size; i++)
+					{
+						((char*)buf)[i] = vp->immediate_data[position + i];
+					}
+					printf("%s\n", buf);
+					new_pos = position + size;
+					r = 0;
+				}
+				else
+				{
+					// Writing to immediate file
+					printf("Minix3: Writing to immediate file\n");
+					int current_length = strlen(vp->immediate_data);
+					if(current_length + size > 32)
+					{
+						// Something else
+					}
+					else
+					{
+						for(int i = 0; i < size; i++)
+						{
+							vp->immediate_data[current_length + i] = buf[i];
+						}
+						new_pos = position + size;
+						r = 0;
+					}
+
+					if(strlen())
+					r = req_readwrite(vp->v_fs_e, vp->v_inode_nr, position,
+									  rw_flag, for_e, buf, size, &new_pos,
+									  &cum_io_incr);
+				}
+			}
+			
+			if (r >= 0 && is_executed == 0)
+			{
 				/* Lab 9 */
 
+				// if (strcmp(vp->v_vmnt->m_mount_path, "/home") == 0){
 				struct vmnt *virtual_mount;
 				virtual_mount = find_vmnt(vp->v_fs_e);
 				if (rw_flag==WRITING && strcmp(virtual_mount->m_mount_path, "/home") == 0)
