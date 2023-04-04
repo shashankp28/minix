@@ -262,7 +262,7 @@ int fs_readwrite(void)
  *				remove_inode_entry				     *
  *===========================================================================*/
 
-static void remove_indoe_entry(rip) register struct inode *rip; /* The Inode that we want to erase*/
+static void remove_inode_entry(rip) register struct inode *rip; /* The Inode that we want to erase*/
 {
   register int i;
   rip->i_size = 0;
