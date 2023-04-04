@@ -125,9 +125,10 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 			virtual_mount = find_vmnt(vp->v_fs_e);
 			if (strcmp(virtual_mount->m_mount_path, "/home") == 0)
 			{
-				printf("file created: %llu\n", vp->v_inode_nr);
+				printf("Minix3: Immediate file created: %llu\n", vp->v_inode_nr);
 			}
-
+			vp->is_immediate = 1;
+			vp->immediate_data = (char *) malloc(sizeof(char) * 32);
 			/*---------------------------------------------------------------------------------*/
 		}
 		else if (r != EEXIST)
