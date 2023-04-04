@@ -23,8 +23,11 @@
 #include "scratchpad.h"
 #include "vnode.h"
 #include "vmnt.h"
+#include <sys/cdefs.h>
 #include <stdio.h>
 #include <string.h>
+#include <minix/safecopies.h>
+
 
 /*===========================================================================*
  *				do_read					     *
