@@ -30,6 +30,7 @@
 #endif
 #endif
 
+
 #define EXTERN        extern	/* used in *.h files */
 
 #define TRUE               1	/* used for turning integers into Booleans */
@@ -95,6 +96,10 @@
 #define ABS2CLICK(a) ((a) >> CLICK_SHIFT)
 
 /* Flag bits for i_mode in the inode. */
+/*-------------------------------------------------------*/
+/*LAB-10*/
+#define I_IMM           0110000 /*For immediate file*/
+/*-------------------------------------------------------*/
 #define I_TYPE          0170000	/* this field gives inode type */
 #define I_UNIX_SOCKET	0140000 /* unix domain socket */
 #define I_SYMBOLIC_LINK 0120000	/* file is a symbolic link */

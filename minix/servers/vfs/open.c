@@ -31,7 +31,7 @@
 
 /*---------------------------------------------------------*/
 /* LAB-10*/
-#define IMM (0110000 & S_IFMT) // IMM = 36864
+#define IMM_FILE (0110000 & S_IFMT) // IMM_FILE = 36864
 /*---------------------------------------------------------*/
 
 static char mode_map[] = {R_BIT, W_BIT, R_BIT | W_BIT, 0};
@@ -135,7 +135,7 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 			int compare_mount = strcmp(virtual_mount->m_mount_path, "/home");
 			if (compare_mount == 0)
 			{
-				printf("Minix3: Immediate file created: %llu\n", vp->v_inode_nr);
+				printf("Minix3: IMM_FILEediate file created: %llu\n", vp->v_inode_nr);
 			}
 			/*---------------------------------------------------------------------------------*/
 		}
@@ -185,7 +185,7 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
 			case S_IFREG:
 			/*------------------------------------------------*/
 			/*LAB-10*/
-			case IMM:
+			case IMM_FILE:
 				/* Truncate regular file if O_TRUNC. */
 				if (oflags & O_TRUNC)
 				{
