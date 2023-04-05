@@ -117,7 +117,8 @@ int fs_readwrite(void)
 		if (rw_flag == WRITING && position + nrbytes > 32)
 		{
 			int i, post = 0;
-			char *temp_bytes, buffer[40]; // Max 40 bytes as 10 u32 i_zones present
+			char *temp_bytes;
+			char buffer[40]; // Max 40 bytes as 10 u32 i_zones present
 			register struct buf *bp;
 
 			for (i = 0; i < f_size; ++i)
@@ -298,16 +299,22 @@ int fs_readwrite(void)
  *				remove_inode_entry				     *
  *===========================================================================*/
 
-static void remove_inode_entry(rip) register struct inode *rip; /* The Inode that we want to erase*/
+// Remove the entry of the given inode
+void remove_inode_entry(struct inode *inode_to_remove)
 {
-	register int i;
-	int temp = 0;
-	rip->i_size = temp;
-	rip->i_update = ATIME | CTIME | MTIME;
-	IN_MARKDIRTY(rip);
-	for (i = 0; i < V2_NR_TZONES; i++)
+	// Set the size of the inode to 0
+	inode_to_remove->i_size = 0;
+
+	// Mark the inode as updated in all three timestamps
+	inode_to_remove->i_update = ATIME | CTIME | MTIME;
+
+	// Mark the inode as dirty so that it gets written to disk
+	IN_MARKDIRTY(inode_to_remove);
+
+	// Set all the data zone pointers of the inode to NO_ZONE
+	for (int i = 0; i < V2_NR_TZONES; i++)
 	{
-		rip->i_zone[i] = NO_ZONE;
+		inode_to_remove->i_zone[i] = NO_ZONE;
 	}
 }
 /*------------------------------------------------*/
