@@ -105,64 +105,46 @@ int fs_readwrite(void)
 
   if (mode_word == I_IMM)
   {
-		if (rw_flag == WRITING)
+		if (rw_flag == WRITING && position + nrbytes > 32)
 		{
-		  if (position + nrbytes > 32)
+		  // Write to immediate file
+		  char buffer[40]; // Max 40 bytes as 10 u32 i_zones present
+		  int i, j = 0;
+		  for (i = 0; i < f_size; i += 4)
 		  {
-			  int i;
-			  int post = 0;
-			  char *temp_bytes;
-			  char buffer[40]; // Max 40 bytes as 10 u32 i_zones present
-			  register struct buf *bp;
-
-			  for (i = 0; i < f_size; ++i)
-			  { // Copy file data in i_zones to buffer.
-				  if (i % 4 == 0)
-					  temp_bytes = (char *)rip->i_zone + i;
-				  buffer[i] = temp_bytes[i % 4];
-			  }
-				remove_inode_entry(rip);
-			  rip->i_mode = (I_REGULAR | (rip->i_mode & ALL_MODES));
-			  mode_word = rip->i_mode & I_TYPE;
-			  if ((bp = new_block(rip, (off_t)ex64lo(post))) == NULL)
-				  return (err_code);
-			  for (i = 0; i < f_size; ++i)
-			  {
-				  ((char *)bp->data)[i] = buffer[i];
-			  }
-			  MARKDIRTY(bp);
-			  put_block(bp, PARTIAL_DATA_BLOCK);
+			  uint32_t word = rip->i_zone[j++];
+			  buffer[i] = word & 0xff;
+			  buffer[i + 1] = (word >> 8) & 0xff;
+			  buffer[i + 2] = (word >> 16) & 0xff;
+			  buffer[i + 3] = (word >> 24) & 0xff;
 		  }
-		  else
+		  remove_inode_entry(rip);
+		  rip->i_mode = (I_REGULAR | (rip->i_mode & ALL_MODES));
+		  mode_word = rip->i_mode & I_TYPE;
+		  struct buf *bp = new_block(rip, (off_t)ex64lo(0));
+		  if (bp == NULL)
 		  {
-			  immediate = 1;
+			  return (err_code);
 		  }
+		  memcpy(bp->data, buffer, f_size);
+		  MARKDIRTY(bp);
+		  put_block(bp, PARTIAL_DATA_BLOCK);
 		}
-		else
+		else if (rw_flag == READING && position < f_size)
 		{
-		  if (position >= f_size)
-			  immediate = 0;
-		  else
-			  immediate = 1;
-		}
-  }
-
-  if (immediate == 1)
-  {
-		if (rw_flag == READING)
-		{
+		  // Read from immediate file
 		  printf("Minix3: Reading from Immediate File.\n");
 		  r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes)cum_io, (vir_bytes)rip->i_zone, (size_t)f_size);
 
-		  int i;
-		  int post = 0;
-		  char *temp_bytes;
 		  char buffer[40]; // Max 40 bytes as 10 u32 i_zones present
-		  for (i = 0; i < f_size; ++i)
-		  { // Copy file data in i_zones to buffer.
-			  if (i % 4 == 0)
-				  temp_bytes = (char *)rip->i_zone + i;
-			  buffer[i] = temp_bytes[i % 4];
+		  int i, j = 0;
+		  for (i = 0; i < f_size; i += 4)
+		  {
+			  uint32_t word = rip->i_zone[j++];
+			  buffer[i] = word & 0xff;
+			  buffer[i + 1] = (word >> 8) & 0xff;
+			  buffer[i + 2] = (word >> 16) & 0xff;
+			  buffer[i + 3] = (word >> 24) & 0xff;
 		  }
 
 		  printf("Minix3: File Contents of Immediate File:\n");
@@ -181,22 +163,34 @@ int fs_readwrite(void)
 		}
 		else
 		{
-		  printf("Minix3: Writing to Immediate File.\n");
-		  vir_bytes zone;
-		  zone = (vir_bytes)rip->i_zone;
-		  r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes)cum_io, zone + position, (size_t)nrbytes);
-		  IN_MARKDIRTY(rip);
-		  if (r == OK)
-		  {
-			  cum_io += nrbytes;
-			  position += (off_t)nrbytes;
-			  nrbytes = 0;
-			
-		  }
+		  // Check if immediate file is required
+		  immediate = (rw_flag == WRITING || position + nrbytes <= 32);
 		}
-	
   }
 
+  if (immediate == 1)
+  {
+		if (rw_flag == READING)
+		{
+		  printf("Minix3: Reading from Immediate File.\n");
+		  char buffer[40];
+		  int bytes_copied = copy_file_data_to_buffer(rip->i_zone, buffer, f_size);
+		  print_file_contents(buffer, bytes_copied);
+		  position += bytes_copied;
+		  cum_io += bytes_copied;
+		  nrbytes = 0;
+		}
+		else if (rw_flag == WRITING && position + nrbytes <= 32)
+		{
+		  printf("Minix3: Writing to Immediate File.\n");
+		  vir_bytes zone = (vir_bytes)rip->i_zone;
+		  int bytes_written = copy_buffer_to_file_data(buffer, zone + position, nrbytes);
+		  position += bytes_written;
+		  cum_io += bytes_written;
+		  nrbytes = 0;
+		  IN_MARKDIRTY(rip);
+		}
+  }
 /*----------------------------------------------------*/
 
   /* Split the transfer into chunks that don't span two blocks. */
